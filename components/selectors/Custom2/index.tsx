@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from '../Container';
 import { Element, useNode } from '@craftjs/core';
 import { Video } from '../Video';
@@ -23,11 +23,12 @@ Custom2VideoDrop.craft = {
   },
 };
 export const Custom2 = (props: any) => {
+  const [text, setText] = useState('You can only drop');
   return (
     <Container {...props} className="overflow-hidden">
       <div className="w-24">
-        <h2 className="text-xs text-white">
-          You can only drop
+        <h2 contentEditable="true" onKeyUp={(e: any) => setText(e.target.value)} className="text-xs text-white">
+          ${text}
           <br />
           one video here.
         </h2>

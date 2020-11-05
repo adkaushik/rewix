@@ -1,0 +1,54 @@
+.card-container {
+  width: 120px;
+  height: 220px;
+  border: 1px;
+  margin: 4px;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 12px;
+}
+
+.movie-image {
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: blur(1px);
+  z-index: 9;
+}
+
+.title {
+  bottom: 0;
+  z-index: 10;
+  font-size: 16px;
+  color: white;
+  font-weight: 800;
+  position: absolute;
+  margin-bottom: 10px;
+}
+
+.section-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px;
+}
+
+.list-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  border: 1px;
+}
