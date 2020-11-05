@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { NextSeo } from 'next-seo';
 import { Editor, Frame, Element, useEditor, useNode } from '@craftjs/core';
-import { Container, Text } from '../components/selectors';
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+
+import { Container, Text } from '../components/selectors';
 import { Custom1, OnlyButtons } from '../components/selectors/Custom1';
 import { Custom2, Custom2VideoDrop } from '../components/selectors/Custom2';
 import { Custom3, Custom3BtnDrop } from '../components/selectors/Custom3';
