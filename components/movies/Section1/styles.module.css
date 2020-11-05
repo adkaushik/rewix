@@ -1,7 +1,6 @@
 .card-container {
   width: 120px;
   height: 220px;
-  border: 1px;
   margin: 4px;
   padding: 12px;
   cursor: pointer;
@@ -39,7 +38,6 @@
   align-items: flex-start;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px;
 }
 
 .list-container {
@@ -50,5 +48,4 @@
   align-items: center;
   flex-direction: row;
   justify-content: flex-start;
-  border: 1px;
 }
