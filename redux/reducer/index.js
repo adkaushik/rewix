@@ -1,6 +1,13 @@
 import { combineReducers } from 'redux';
 
-import editorReducer from './editor';
-import pagebarReducer from './pagebar';
+import editor from './editor';
+import pagebar from './pagebar';
+import movie from './movie';
+import modal from './modal';
 
-export default combineReducers({ editor: editorReducer, pagebar: pagebarReducer });
+export default combineReducers({ 
+  editor,
+  pagebar,
+  movie,
+  modal,
+});
