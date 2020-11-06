@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NextSeo } from 'next-seo';
 import { Editor, Frame, Element, useEditor, useNode } from '@craftjs/core';
 import { createMuiTheme } from '@material-ui/core';
@@ -14,10 +15,14 @@ import Swiper from '../components/swiper';
 
 import SingleRowContainer from '../components/selectors/SingleRowContainer';
 
+import { setShowModal } from '../redux/actions/modal';
+
 import lz from 'lzutf8';
 import '../styles/app.css';
 
 import Section1 from '../components/movies/Section1';
+import Modal from '../components/modal';
+import MovieDetails from '../components/movieDetails';
 
 const theme = createMuiTheme({
   typography: {
@@ -44,16 +49,15 @@ Button.craft = {
   displayName: 'Button'
 }
 
-
 const MainContent = () => {
   const {connectors: {connect, drag}} = useNode();
-      return (
-      <div ref={(node) => connect(drag(node))} style={{ width: '100%', height: '500px', position: 'relative' }}>
-        <img style={{ position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, bottom: 0, alignSelf: 'center', width: '100%', height: '100%', objectFit: 'cover' }} src="https://static.toiimg.com/photo/72975551.cms" />
-        <span style={{ position: 'absolute', zIndex: 2, color: 'white', fontSize: '30px', fontWeight: 'bold', top: 60, left: 40 }}>New Movie Please Watch this now!!!</span>
-      </div>
-    );
-   }
+  return (
+    <div ref={(node) => connect(drag(node))} style={{ width: '100%', height: '500px', position: 'relative' }}>
+      <img style={{ position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, bottom: 0, alignSelf: 'center', width: '100%', height: '100%', objectFit: 'cover' }} src="https://static.toiimg.com/photo/72975551.cms" />
+      <span style={{ position: 'absolute', zIndex: 2, color: 'white', fontSize: '30px', fontWeight: 'bold', top: 60, left: 40 }}>New Movie Please Watch this now!!!</span>
+    </div>
+  );
+}
 
 const Footer = () => (
   <div style={{ width: '100%', height: '200px', backgroundColor: '#0f171e' }}>
@@ -101,64 +105,73 @@ const ToolBar = () => {
 
 function App() {
   const base64 =
-    // 'eyJST09UIjp7InR5cGUiOiJkaXYiLCJpc0NhbnZhcyI6ZmFsc2UsInByb3BzIjp7InN0eWxlIjp7ImRpc3BsYXkiOiJmbGV4In19LCJkaXNwbGF5TmFtZSI6ImRpdiIsImN1c3RvbSI6e30sImhpZGRlbiI6ZmFsc2UsIm5vZGVzIjpbInZieFVYRUp3NnkiLCJFMUFlSWNQcHpuIl0sImxpbmtlZE5vZGVzIjp7fX0sInZieFVYRUp3NnkiOnsidHlwZSI6ImRpdiIsImlzQ2FudmFzIjpmYWxzZSwicHJvcHMiOnsic3R5bGUiOnsiZmxleCI6M319LCJkaXNwbGF5TmFtZSI6ImRpdiIsImN1c3RvbSI6e30sImhpZGRlbiI6ZmFsc2UsIm5vZGVzIjpbIkM1OGVLUmROUHUiXSwibGlua2VkTm9kZXMiOnt9LCJwYXJlbnQiOiJST09UIn0sIkM1OGVLUmROUHUiOnsidHlwZSI6e30sImlzQ2FudmFzIjp0cnVlLCJwcm9wcyI6eyJmbGV4RGlyZWN0aW9uIjoiY29sdW1uIiwiYWxpZ25JdGVtcyI6ImNlbnRlciIsImp1c3RpZnlDb250ZW50IjoiY2VudGVyIiwiZmlsbFNwYWNlIjoibm8iLCJwYWRkaW5nIjpbIjAiLCIyMCIsIjAiLCIwIl0sIm1hcmdpbiI6WyIyMCIsIjAiLCIyMCIsIjAiXSwiYmFja2dyb3VuZCI6eyJyIjowLCJnIjoyNTAsImIiOjAsImEiOjI1NX0sImNvbG9yIjp7InIiOjAsImciOjAsImIiOjAsImEiOjF9LCJ3aWR0aCI6IjEwMSUiLCJoZWlnaHQiOiI0OSUiLCJtYXJnaW5Cb3R0b20iOjIwfSwiZGlzcGxheU5hbWUiOiJDb250YWluZXIiLCJjdXN0b20iOnt9LCJoaWRkZW4iOmZhbHNlLCJub2RlcyI6W10sImxpbmtlZE5vZGVzIjp7fSwicGFyZW50IjoidmJ4VVhFSnc2eSJ9LCJQZElHa21TQmk0Ijp7InR5cGUiOnsicmVzb2x2ZWROYW1lIjoiU2VjdGlvbjEifSwiaXNDYW52YXMiOmZhbHNlLCJwcm9wcyI6eyJiYWNrZ3JvdW5kQ29sb3IiOiJ3aGl0ZSJ9LCJkaXNwbGF5TmFtZSI6IlNlY3Rpb24xIiwiY3VzdG9tIjp7fSwiaGlkZGVuIjpmYWxzZSwibm9kZXMiOltdLCJsaW5rZWROb2RlcyI6e30sInBhcmVudCI6IjFSQV9MSmpxWEoifSwiV3JkajFJdEY2SiI6eyJ0eXBlIjp7InJlc29sdmVkTmFtZSI6IlNlY3Rpb24xIn0sImlzQ2FudmFzIjpmYWxzZSwicHJvcHMiOnsiYmFja2dyb3VuZENvbG9yIjoiYmxhY2sifSwiZGlzcGxheU5hbWUiOiJTZWN0aW9uMSIsImN1c3RvbSI6e30sImhpZGRlbiI6ZmFsc2UsIm5vZGVzIjpbXSwibGlua2VkTm9kZXMiOnt9LCJwYXJlbnQiOiIxUkFfTEpqcVhKIn0sIkUxQWVJY1Bwem4iOnsidHlwZSI6ImRpdiIsImlzQ2FudmFzIjpmYWxzZSwicHJvcHMiOnsic3R5bGUiOnsiZmxleCI6MSwiZmxleERpcmVjdGlvbiI6ImNvbHVtbiIsImFsaWduSXRlbXMiOiJjZW50ZXIiLCJqdXN0aWZ5Q29udGVudCI6InNwYWNlLWJldHdlZW4ifX0sImRpc3BsYXlOYW1lIjoiZGl2IiwiY3VzdG9tIjp7fSwiaGlkZGVuIjpmYWxzZSwibm9kZXMiOlsiMVJBX0xKanFYSiJdLCJsaW5rZWROb2RlcyI6e30sInBhcmVudCI6IlJPT1QifSwiMVJBX0xKanFYSiI6eyJ0eXBlIjp7fSwiaXNDYW52YXMiOnRydWUsInByb3BzIjp7ImZsZXhEaXJlY3Rpb24iOiJjb2x1bW4iLCJhbGlnbkl0ZW1zIjoiY2VudGVyIiwianVzdGlmeUNvbnRlbnQiOiJjZW50ZXIiLCJmaWxsU3BhY2UiOiJubyIsInBhZGRpbmciOlsiMCIsIjIwIiwiMCIsIjAiXSwibWFyZ2luIjpbIjIwIiwiMCIsIjIwIiwiMCJdLCJiYWNrZ3JvdW5kIjp7InIiOjAsImciOjAsImIiOjAsImEiOjI1NX0sImNvbG9yIjp7InIiOjAsImciOjAsImIiOjAsImEiOjF9LCJ3aWR0aCI6IjEwMCUiLCJoZWlnaHQiOiIxMDAlIiwibWFyZ2luQm90dG9tIjoyMH0sImRpc3BsYXlOYW1lIjoiQ29udGFpbmVyIiwiY3VzdG9tIjp7fSwiaGlkZGVuIjpmYWxzZSwibm9kZXMiOlsiV3JkajFJdEY2SiIsImN2TlZoWUMwMU8iLCJQZElHa21TQmk0Il0sImxpbmtlZE5vZGVzIjp7fSwicGFyZW50IjoiRTFBZUljUHB6biJ9LCJjdk5WaFlDMDFPIjp7InR5cGUiOnsicmVzb2x2ZWROYW1lIjoiU2VjdGlvbjEifSwiaXNDYW52YXMiOmZhbHNlLCJwcm9wcyI6eyJiYWNrZ3JvdW5kQ29sb3IiOiJibHVlIn0sImRpc3BsYXlOYW1lIjoiU2VjdGlvbjEiLCJjdXN0b20iOnt9LCJoaWRkZW4iOmZhbHNlLCJub2RlcyI6W10sImxpbmtlZE5vZGVzIjp7fSwicGFyZW50IjoiMVJBX0xKanFYSiJ9fQ==';
-    'eyJST09UIjp7InR5cGUiOiJkaXYiLCJpc0NhbnZhcyI6ZmFsc2UsInByb3BzxCdzdHlsZcQJZGlzcGxheSI6ImZsZXgiLMUHRGlyZWN0aW9uIjoiY29sdW1uIn19LMgsTmFtymNjdXN0b20iOnt9LCJoaWRkZW7JbW5vZGVzIjpbInhjdWpjendtcmYiLCI3RTZsd2V5T2dZIiwiT19jaWlMQnN6TCJdLCJsaW5rZWROxjd7xHLLOv8A3PQA3OUA0jox+QDULCJhbGlnbkl0ZW1zxBZlbnRlciIsImp1c3RpZnlDb250ZW50Ijoic3BhY2UtYmV0d2Vl/wEL/wELTWVDaGdaMGRhVvMA8SwicGFyxnLlAc99LMww+gEBdHJ16wEA8gCeZf8AnecAnf0AkesBin0sImFKZTdxUnBIX2jqAJd7InJlc29sdmVkx3hNYWlu6AFEffsBsfEAscw5/wC6/wC65AC6ang0TlBWdzRQ5QC66wJ//wJS+wJS/wIC/QIC6wCP/wIC5gICyzD/AgL/AgL/AJ3lAJ1SdkxDQ0NrZmpUIiwiRktJRU1FN21WcSIsIkNTV0ZRXzR4csR56wH/LCIxVWJDNjMyOERwIiwiaEtzUzRnTVAySCIsIkhlcW5ERUtQbUUiLCI1NVhBZnFlMEhC5AP4dXNpOWVEaTI1/gEF6wGufSzsAJ76AnZTd2lwZXL/AnHvASDHNP8BJP8CbPICbOsBNPsAsOYEljH9ALIidGl05AKCyC4gMSBDYXJhb3VzZWwgRHJhZ2dhYmzkAeXpAqpwYWRkaW5nQm905QDRIjEycOQF3scXVG9wyBTyAszHZDH/ARD/ARDzARDrAlH/AcD/AcD/AcD/ALD/ALDqALDrAtr/AcD/AcDyAcAy5AHA/wG//wG//wG//wG//wEP9AEP6wPc/wG//wG//wG//wCw/wCw6gCw6wRl/wG//wG/8gG/M/8Bv/8Bv/8Bv/8Bv/8BD/gBD+sFgf8BD/8BD/IBDzT/AQ//AQ//AQ//AQ//AQ/4AQ/rBp3/As7/As7/As7/ALD/ALDrAs7qCyv/CLn/Cwv/Cwv/Cwv/Cwv/CQnsCGx0d3VsRERvTHZU/wkJ5wkJyzD7AbFpbmdsZVJvd+QAsmFpbvABvf8JKf8JKesJxlBvWC01dGt6LUH+AL7rAbfkCc3LN/oAxUZvb+QBfv8Cdu4Ausc0/wC+/wJ25ACx6wFnfX0=';
+    'eyJST09UIjp7InR5cGUiOiJkaXYiLCJpc0NhbnZhcyI6ZmFsc2UsInByb3BzxCdzdHlsZcQJd2lkdGgiOiIxMDAlIiwiZGlzcGxheSI6ImZsZXgiLMUHRGlyZWN0aW9uIjoicm93In19ySlOYW3Kb2N1c3RvbSI6e30sImhpZGRlbsl5bm9kZXMiOlsiMVJwM242T3F1ZiIsIjE0QmNrRkllVk0iXSwibGlua2VkTsYqe8Rlyy3/ANv0ANv/AMw6ImNvbHVtbiIs6QEFODAl/wDd/gDdbzdJVUluVGtzQuQA3U8zWFdsNWpKYyIsImFqcVRwZjhXS0nzAOosInBhcmVudCI65gHHfSzMSv8A+vQA+vkA6WFsaWduSXRlbXPEFmVudGVyIiwianVzdGlmeUNvbnTmAIZzcGFjZS1iZXR3ZWVu/wES/gESd1NrN0Zwa0FCZf4A+OsB6n0szDb6AP50cnXrAP3yAKRl/wCj6ACjald6M25oU0FROf4Ao+sBk30szDbpAKN7InJlc29sdmVk5wCETWFpbugBVn37AbrxAL3MOf8AxuYAxv0AuusBT+QDVeoCmP8CW/MCW/8CDP0BaUFVZkxwVmo3enH/AgztAgzLNv8CDP8CDP8Ao+UAozQzWFRXRms3SXciLCJaWUxXbFVQWG00/wCw6gFRfSzMQ/oCGVN3aXBlcv0CFCJ0aXTkAXMic8UsIDHELu4A18dG/wDb/wIh5ADC6wFkfe0A+PsAwuYEXeUAlv8AxMouIDEgQ2FyYW91c2VsIERyYWdnYWJs5AGc6QS6cGFkZGluZ0JvdOUA0SIxMnDkBbrHF1RvcMgU8gKJx2Qx/wEQ/wEQ8wEQ6wW8/wMx/wWM/wWM/wWM/wWM/wDyOlsiMDBiZWlrNXRqWP8C0O0DgMs2+wIOaW5nbGVSb3fkALhhaW7wAtz/A6D/A6DqAMN2U2puajVPS1FQ/gDD6wGzfSzMNvoAw0Zvb+QBgv8Fp+4AuMc0/wC8/wJx5ACw6wFl5AWi6gkX/wJx/AnSMuUJ0W1hcmdpbkxlZsRnMjTlA07xCRloZWlnaMQh5woGYmFja2dyb3VuZENvbG9yIjoiIzBmMTcx5AGnbWluSMgvMzAwxVHnAstt5ADY6gLL+QL6cG9zaccUc3RpY2t5IiwidOQD2zEwMP8C4f0CHmlCR1pHOGdkd3X/CWXnCWXLMP8GW/8Cu/8AneUAnS00VGxCX0ZT/wkK7AH9fSzMNvoCu1Rvb2xCYf8CvPAAucg1/wC+/wK95ACy6wFHfX0=';
   const uint8array = lz.decodeBase64(base64);
   const json = lz.decompress(uint8array);
   console.log('json',json);
+
+  const { modal, movie: { selectedMovie } } = useSelector(state => ({ modal: state.modal, movie: state.movie }));
+
   return (
     <div style={{ width: '100%', height: 'auto', minHeight: '100vh', marginTop: '80px', backgroundColor: '#0f171e', position: 'relative' }}>
-    <Editor
-      enabled
-      resolver={{ Section1, MainContent, SingleRowContainer, Swiper, Footer, ToolBar, Button }}>
-      <div style={{ width: '100%', height: 'auto', minHeight: '100vh', backgroundColor: 'black', padding: '24px' }}>
-        <Frame>
-          <div style={{width: '100%', display: 'flex', flexDirection: 'row'}}>
+      <Modal 
+        show={modal['moviePreview'].show}
+        type="moviePreview"
+        setShowModal={setShowModal}
+        movie={selectedMovie}
+        childElement={<MovieDetails movie={selectedMovie} />}
+      />
+      <Editor
+        enabled
+        resolver={{ Section1, MainContent, SingleRowContainer, Swiper, Footer, ToolBar, Button, Modal, MovieDetails }}>
+        <div style={{ width: '100%', height: 'auto', minHeight: '100vh', backgroundColor: 'black', padding: '24px' }}>
+          <Frame>
+            <div style={{width: '100%', display: 'flex', flexDirection: 'row'}}>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', width: '80%' }}>
+                <div style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Element
+                    is="div"
+                    canvas
+                  >
+                    {/* <Section1 title="Main Content Non Draggable" style={{ paddingBottom: '12px', paddingTop: '12px', border: '1px solid blue' }} /> */}
+                    <MainContent />
+                  </Element>
+                </div>
+                <div style={{ }}>
+                  <Element
+                    is="div"
+                    canvas
+                  >
+                    <Swiper title="swiper 1"/>
+                    <Section1 title="Section 1 Caraousel Draggable" style={{ paddingBottom: '12px', paddingTop: '12px' }}/>
+                    <Swiper/>
+                    <Section1 title="Section 2 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
+                    <Swiper/>
+                    <Section1 title="Section 3 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
+                    <Section1 title="Section 4 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
+                    <Swiper/>
+                  </Element>
+                </div>
+                <div style={{  flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Element
+                    is={SingleRowContainer}
+                    canvas>
+                    <Footer />
+                  </Element>
+                </div>
+              </div>
             
-            <div style={{ display: 'flex', flexDirection: 'column', width: '80%' }}>
-              <div style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Element
-                  is="div"
-                  canvas
-                >
-                  {/* <Section1 title="Main Content Non Draggable" style={{ paddingBottom: '12px', paddingTop: '12px', border: '1px solid blue' }} /> */}
-                  <MainContent />
+              <div style={{width: '20%', marginLeft: '24px', display: 'flex', height: '100%', backgroundColor: '#0f171e', minHeight: '300px', alignItmes: 'center', flexDirection: 'column', position: 'sticky', top: 100}}>
+                <Element is="div" canvas>
+                      <ToolBar />
                 </Element>
               </div>
-              <div style={{ }}>
-                <Element
-                  is="div"
-                  canvas
-                >
-                  <Swiper />
-                  <Section1 title="Section 1 Caraousel Draggable" style={{ paddingBottom: '12px', paddingTop: '12px' }} />
-                  <Swiper />
-                  <Section1 title="Section 2 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
-                  <Swiper />
-                  <Section1 title="Section 3 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
-                  <Section1 title="Section 4 Carousel Draggable"  style={{ paddingBottom: '12px', paddingTop: '12px' }} />
-                  <Swiper />
-                </Element>
-              </div>
-              <div style={{  flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Element
-                  is={SingleRowContainer}
-                  canvas>
-                  <Footer />
-                </Element>
-              </div>
-            </div>
-          
-            <div style={{width: '20%', marginLeft: '24px', display: 'flex', height: '100%', backgroundColor: '#0f171e', minHeight: '300px', alignItmes: 'center', flexDirection: 'column', position: 'sticky', top: 100}}>
-              <Element is="div" canvas>
-                    <ToolBar />
-              </Element>
-            </div>
 
+          </div>
+          </Frame>
         </div>
-        </Frame>
-      </div>
-    </Editor>
+      </Editor>
     </div>
   );
 }
