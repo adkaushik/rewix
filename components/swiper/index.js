@@ -18,7 +18,7 @@ import '../../sass/style.scss';
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
-export default (props) => {
+const CustomSwiper = (props) => {
   const { connectors: { connect, drag } } = useNode();
   const movies = useSelector(state => state.movie.list);
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ export default (props) => {
 
   return (
     <div ref={(ref) => connect(drag(ref))} style={{ position: 'relative' }}>
-      <div style={{ cursor: 'grab', backgroundColor: 'red', width: '100px', height: '50px', color: 'white', fontSize: '30px', fontWeight: 600, position: 'absolute', top: 20, right: 40, zIndex: 100, textAlign: 'center' }}>
+      <div style={{ cursor: 'grab', backgroundColor: 'red', width: '100px', height: '50px', color: 'white', fontSize: '30px', fontWeight: 600, position: 'absolute', top: 20, left: 40, zIndex: 100, textAlign: 'center' }}>
         MOVE
       </div>
       <Swiper
@@ -95,3 +95,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default CustomSwiper;
