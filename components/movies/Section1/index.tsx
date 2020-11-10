@@ -43,7 +43,7 @@ const Section1 = ({ backgroundColor="", style = {}, title }): any => {
   const { connectors: {connect, drag} } = useNode();
   return (
     <div ref={ ref => connect(drag(ref))} className="section-container" style={{ backgroundColor, ...style }}>
-      <span contentEditable="true" style={{ margin: '12px', fontWeight: 800, color: 'white', fontSize: '20px' }}>{title}</span>
+      <span style={{ margin: '12px', fontWeight: 800, color: 'white', fontSize: '20px' }}>{title}</span>
       <div className="list-container">
         {moviesList.map((movie) => {
           return (

@@ -3,6 +3,8 @@ import React from 'react';
 import Backdrop from './Backdrop';
 import '../../sass/style.scss';
 
+import { ThemeContext } from '../../themes';
+
 
 export default function Modal(props) {
   const backgroundStyle = {
@@ -13,7 +15,9 @@ export default function Modal(props) {
   };
 
   return (
-    <>
+    <ThemeContext.Consumer>
+      {({theme}) => (
+        <>
       <Backdrop show={props.show} toggleBackdrop={props.setShowModal} type={props.type}/>
       <div
         style={backgroundStyle}
@@ -23,5 +27,7 @@ export default function Modal(props) {
       </div>
       s
     </>
+      )}
+    </ThemeContext.Consumer>
   );
 }

@@ -7,7 +7,8 @@ import { FLIX_DARK_THEME } from '../../themes';
 const initialState = {
   theme: {
     active: FLIX_DARK_THEME
-  }
+  },
+  isEditMode: true
 };
 
 function reducer(state = initialState, action) {
@@ -23,6 +24,12 @@ function reducer(state = initialState, action) {
         ...state.theme,
         active: action.payload
       }
+    };
+  }
+  case constants.SET_EDIT_MODE: {
+    return {
+      ...state,
+      isEditMode: action.payload
     };
   }
 

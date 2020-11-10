@@ -1,5 +1,6 @@
 export const constants = {
   SET_THEME: 'preferences/SET_THEME',
+  SET_EDIT_MODE: 'preferences/SET_EDIT_MODE',
 };
 
 export const setTheme = (theme) => ({
@@ -7,6 +8,12 @@ export const setTheme = (theme) => ({
   payload: theme
 });
 
+export const setEditMode = (isEditMode) => ({
+  type: constants.SET_EDIT_MODE,
+  payload: isEditMode
+});
+
 export default {
-  setTheme
+  setTheme,
+  setEditMode
 };

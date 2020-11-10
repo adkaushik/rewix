@@ -27,7 +27,7 @@ export const Custom2 = (props: any) => {
   return (
     <Container {...props} className="overflow-hidden">
       <div className="w-24">
-        <h2 contentEditable="true" onKeyUp={(e: any) => setText(e.target.value)} className="text-xs text-white">
+        <h2 onKeyUp={(e: any) => setText(e.target.value)} className="text-xs text-white">
           ${text}
           <br />
           one video here.
